@@ -12,4 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
     //puto el que lo lea
+
+
+
 }
