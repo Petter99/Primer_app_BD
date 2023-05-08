@@ -142,22 +142,22 @@
             android:id="@+id/btn_actualizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Actualizar"
             android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            />
+            android:layout_weight="1"
+            android:onClick="Actualizar"
+            android:text="Actualizar"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btn_eliminar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:layout_weight="1"
-            android:text="Eliminar"
             android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            />
+            android:layout_weight="1"
+            android:onClick="eliminar"
+            android:text="Eliminar"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

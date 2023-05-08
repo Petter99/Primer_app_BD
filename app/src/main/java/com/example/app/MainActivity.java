@@ -4,17 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText txtcarnet, txtnombre, txtapellido, txtedad, txtdirec;
     Button guardar, buscar, actualizar, eliminar;
+    AdminSql admin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         txtedad = (EditText) findViewById(R.id.txt_edad);
         txtdirec = (EditText) findViewById(R.id.txt_direc);
 
+        admin = new AdminSql(this, "Colegio", null, 1);
+
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 Buscar();
             }
         });
+
+
     }
 
     //Metodo para limpiar cajas de texto
@@ -56,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
     //Metodo para guardar datos en la BD
     public void Guardar(){
-        try {
-            AdminSql admin = new AdminSql(this, "Colegio", null, 1);
+        AdminSql admin = new AdminSql(this, "Colegio", null, 1);
 
-            SQLiteDatabase BD = admin.getWritableDatabase();
+        SQLiteDatabase BD= admin.getWritableDatabase();
+        try {
+
 
             String carnet = txtcarnet.getText().toString();
             String nombre = txtnombre.getText().toString().toLowerCase();
@@ -77,23 +86,29 @@ public class MainActivity extends AppCompatActivity {
             registro.put("direccion",direccion);
             BD.insert("estudiantes",null,registro);
             //cerrando conexion base de datos
-            BD.close();
+
 
             limpiartext();//limpiando cajas de texto
 
             Toast.makeText(this,"Datos guardados",Toast.LENGTH_SHORT).show();//Mensaje toast
         }catch (Exception ex){
             ex.toString();
+        }finally {
+            BD.close();
         }
     }
+
+
     //Metodo para buscar datos en la BD
     public void Buscar(){
-        try {
-            AdminSql admin = new AdminSql(this, "Colegio", null, 1);
+        AdminSql admin = new AdminSql(this, "Colegio", null, 1);
 
-            SQLiteDatabase BD = admin.getWritableDatabase();
+        SQLiteDatabase BD= admin.getWritableDatabase();
+        try {
+
 
             int carnet = Integer.valueOf(txtcarnet.getText().toString());
+
 
             //Buscando datos en la bd (Consulta)
 
@@ -109,14 +124,45 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"No existe el registro buscado", Toast.LENGTH_LONG).show();
 
             }
-            BD.close();//Cerrando conexion
+
 
         }catch (Exception ex){
             ex.toString();
+        }finally {
+            BD.close();
         }
 
     }
 
     //Metodo para actualizar datos en la BD
+    public void Actualizar(View view)
+    {
+            String carnettxt = txtcarnet.getText().toString();
+            String nombretxt = txtnombre.getText().toString().toLowerCase();
+            String apellidotxt = txtapellido.getText().toString().toLowerCase();
+            String edadtxt = txtedad.getText().toString();
+            String direcciontxt = txtdirec.getText().toString();
+
+            if(admin.Actualizar(carnettxt,nombretxt,apellidotxt,edadtxt,direcciontxt)) {
+                Toast.makeText(this, "Se actualizo el Registro", Toast.LENGTH_SHORT).show();//Mensaje toast
+
+                limpiartext();
+            }else{
+                Toast.makeText(this, "No actualizo el Registro", Toast.LENGTH_SHORT).show();//Mensaje toast
+                limpiartext();
+            }
+
+    }
+
+    public void eliminar(View view){
+        String carnet = txtcarnet.getText().toString();
+
+        if(admin.delete(carnet)){
+            limpiartext();
+            Toast.makeText(this,"Registro eliminado", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this,"No se elimino el registro", Toast.LENGTH_LONG).show();
+        }
+    }
 
 }
