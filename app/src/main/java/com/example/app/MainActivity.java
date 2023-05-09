@@ -65,11 +65,8 @@ public class MainActivity extends AppCompatActivity {
     //Metodo para guardar datos en la BD
     public void Guardar(){
         AdminSql admin = new AdminSql(this, "Colegio", null, 1);
-
         SQLiteDatabase BD= admin.getWritableDatabase();
         try {
-
-
             String carnet = txtcarnet.getText().toString();
             String nombre = txtnombre.getText().toString().toLowerCase();
             String apellido = txtapellido.getText().toString().toLowerCase();
@@ -102,18 +99,11 @@ public class MainActivity extends AppCompatActivity {
     //Metodo para buscar datos en la BD
     public void Buscar(){
         AdminSql admin = new AdminSql(this, "Colegio", null, 1);
-
         SQLiteDatabase BD= admin.getWritableDatabase();
         try {
-
-
             int carnet = Integer.valueOf(txtcarnet.getText().toString());
-
-
             //Buscando datos en la bd (Consulta)
-
             Cursor fila = BD.rawQuery("SELECT * FROM estudiantes WHERE carnet="+carnet,null); //Consulta
-
             if(fila.moveToFirst()){
                 //Colocando datos en las cajas de texto
                 txtnombre.setText(fila.getString(1));
@@ -122,10 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 txtdirec.setText(fila.getString(4));
             }else{
                 Toast.makeText(this,"No existe el registro buscado", Toast.LENGTH_LONG).show();
-
             }
-
-
         }catch (Exception ex){
             ex.toString();
         }finally {
