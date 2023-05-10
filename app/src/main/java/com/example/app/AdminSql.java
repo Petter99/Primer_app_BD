@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AdminSql extends SQLiteOpenHelper {
 
-    public AdminSql(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public AdminSql(Context context , String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase bd) {
-        bd.execSQL("create table estudiantes(carnet int primary key,nombre text," +
-                " apellido text, edad int, direccion text)");
+        bd.execSQL("create table estudiantes(carnet int primary key NOT NULL,nombre text NOT NULL," +
+                " apellido text NOT NULL, edad int NOT NULL, direccion text NOT NULL)");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class AdminSql extends SQLiteOpenHelper {
         boolean verificador = false;
         SQLiteDatabase BD= this.getWritableDatabase();
         try {
-            //BD.execSQL("DELETE FROM estudiantes WHERE id='"+carnet);
+            //BD.execSQL("DELETE FROM estudiantes WHERE id='"+carnet+"'");
             BD.delete("estudiantes","carnet ="+carnet,null);
             verificador = true;
         }catch (Exception e){
