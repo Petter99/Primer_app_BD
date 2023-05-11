@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Guardar();
-            }
-        });
+            public void onClick(View view) {Guardar();}});
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,14 +62,17 @@ public class MainActivity extends AppCompatActivity {
     //Metodo para guardar datos en la BD
     public void Guardar(){
         if(Validar_Guardar()) {
-        AdminSql admin = new AdminSql(this, "Colegio", null, 1);
-        SQLiteDatabase BD= admin.getWritableDatabase();
+            AdminSql admin = new AdminSql(this, "Colegio", null, 1);
+            SQLiteDatabase BD= admin.getWritableDatabase();
+
             try {
-                if(Buscar()) {
-                    limpiartext();//limpiando cajas de texto
-                    Toast.makeText(this, String.valueOf("Este carnet ya existe"), Toast.LENGTH_SHORT).show();//Mensaje toast
+                int carnet = Integer.parseInt(txtcarnet.getText().toString());
+                //Buscando datos en la bd (Consulta)
+                Cursor fila = BD.rawQuery("SELECT * FROM estudiantes WHERE carnet = " + carnet, null); //Consulta
+                if (fila.moveToFirst()) {
+                    Toast.makeText(this, "Este carnet existe", Toast.LENGTH_SHORT).show();//Mensaje toast
+
                 }else{
-                    String carnet = txtcarnet.getText().toString();
                     String nombre = txtnombre.getText().toString().toLowerCase();
                     String apellido = txtapellido.getText().toString().toLowerCase();
                     String edad = txtedad.getText().toString();
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     registro.put("apellido", apellido);
                     registro.put("edad", edad);
                     registro.put("direccion", direccion);
-                    Long dato = BD.insert("estudiantes", null, registro);
+                    BD.insert("estudiantes", null, registro);
                     limpiartext();//limpiando cajas de texto
                     Toast.makeText(this, String.valueOf("se guardo el dato"), Toast.LENGTH_SHORT).show();//Mensaje toast
                 }
